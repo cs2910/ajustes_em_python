@@ -1,0 +1,59 @@
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import extract, update,insert, text
+from tabelatributos import Benparcial, Idimoresp, Protbeneficio
+from conexao import engine, connection
+import requests, json
+
+#################################################
+#           Conexão com banc de dados           #
+#################################################
+Session = sessionmaker(bind=engine)
+session = Session()
+
+#### Linka
+urlPost = 'https://tributos.betha.cloud/service-layer-tributos/api/guias/'
+#### Token da Endidade
+
+tokenEntidade = 'c668172c-0f6e-4917-900d-337e636a2821'
+##tokenEntidade = ''
+
+
+'''Utilizando select direto'''
+query = text("SELECT * FROM ajusteguia where protocolo is null") ##where idlanc = 954610799
+resultados = session.execute(query).fetchall()
+
+for registro in resultados:
+    print(registro.idguia)
+    data = []
+    data.append({"idIntegracao": f'{registro.idguia}',
+                 "guias": {
+                     "idGerado": {
+                         "id": registro.idguia
+                     },
+                     "situacao": "CANCELADA",
+                     "idPessoaAtual": registro.idpessoa
+                 }})
+
+    print(data)
+    dados = json.dumps(data)
+    print(dados)
+    response = requests.patch(urlPost,
+                             headers={'Authorization': f'Bearer {tokenEntidade}', 'content-type': 'application/json'},
+                             data=dados)
+    status = response.status_code
+    print(response.content)
+    print(status)
+    if status == 200:
+        print("entrou")
+        recurrence = json.loads(response.content)
+        f_token_retorno = recurrence['idLote']
+        print(f'protocolo {f_token_retorno}')
+        stmt = text(f"UPDATE ajusteguia SET protocolo = '{f_token_retorno}' WHERE idguia = {registro.idguia}")
+        print(stmt)
+        session.execute(stmt)
+        session.commit()
+    else:
+        stmt = Protbeneficio(protocolo='erro')
+        print(stmt)
+        session.add(stmt)  ##f_situacao = dadosGet['situacao']
+        session.commit()
