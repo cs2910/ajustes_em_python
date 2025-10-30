@@ -13,24 +13,24 @@ session = Session()
 #### Linka
 urlPost = 'https://tributos.betha.cloud/service-layer-tributos/api/imoveis'
 #### Token da Endidade
-tokenEntidade = 'ceb53c70-6b23-48e6-875b-d32458c5f259'
+tokenEntidade = '8b19d51d-684f-4b7f-889a-6e8fcd7ce3fe'
 
 '''Utilizando select direto'''
 
-query = text("select * from ajustabairroimovel where protocolo is null")
+##query = text("select * from ajustabairroimovel where protocolo is null")
+query = text("select * from imovelbairromais where protocolo is null")
 
 ##query = text("SELECT * FROM ajustedtisencao where protocolo is null")
 resultados = session.execute(query).fetchall()
 batch_size = 50
 data = []
 for tabela in resultados:
-    situacao = 'CANCELADA'
-    print(f'Imóvel  {tabela.codimovel} - id Imovel - {tabela.id} id Logra  {tabela.idbairro}')
+    print(f'Imóvel  {tabela.codigo} - id Imovel - {tabela.idimovel} id Bairro  {tabela.idbairro} NomeBairro {tabela.bairroNovo}')
     data.append({
-        "idIntegracao": f'{tabela.codimovel}',
+        "idIntegracao": f'{tabela.codigo}',
         "imoveis": {
             "idGerado": {
-                "id": tabela.id
+                "id": tabela.idimovel
             },
             "idBairro": tabela.idbairro
         }
@@ -60,7 +60,7 @@ for tabela in resultados:
             f_token_retorno = recurrence['idLote']
             print(f'protocolo {f_token_retorno}')
             lista_sequenc_formatada = ", ".join([f"'{item['idIntegracao']}'" for item in data])
-            stmt = text(f"UPDATE ajustabairroimovel SET protocolo = '{f_token_retorno}' WHERE codimovel IN ({lista_sequenc_formatada})")
+            stmt = text(f"UPDATE imovelbairromais SET protocolo = '{f_token_retorno}' WHERE codigo IN ({lista_sequenc_formatada})")
             session.execute(stmt)
             session.commit()
         else:
@@ -84,7 +84,7 @@ if data:
         f_token_retorno = recurrence['idLote']
         print(f'protocolo {f_token_retorno}')
         lista_sequenc_formatada = ", ".join([f"'{item['idIntegracao']}'" for item in data])
-        stmt = text(f"UPDATE ajustabairroimovel SET protocolo = '{f_token_retorno}' WHERE codimovel IN ({lista_sequenc_formatada})")
+        stmt = text(f"UPDATE imovelbairromais SET protocolo = '{f_token_retorno}' WHERE codigo IN ({lista_sequenc_formatada})")
         session.execute(stmt)
         session.commit()
     else:
