@@ -33,7 +33,9 @@ cursor_postgres.execute(f"SELECT table_name FROM information_schema.tables WHERE
                         f"AND table_type = 'BASE TABLE' "
                         f"and (table_name iLIKE 'ipt%' or table_name iLIKE 'itb%' or "
                         f"table_name iLIKE 'div%' or table_name iLIKE 'iss%' or "
-                        f"table_name iLIKE 'trb%')  group by table_name;")
+                        f"table_name iLIKE 'trb%' or table_name iLIKE 'pej%')  group by table_name;")
+
+
 tabelas = cursor_postgres.fetchall()
 
 ##resultados = cursor_postgres.execute(query).fetchall()
