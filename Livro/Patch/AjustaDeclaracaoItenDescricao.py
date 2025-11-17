@@ -32,15 +32,14 @@ query = text("select df.entidade,df.declaracao,df.documentos,discriminacao,ddi.l
              "  ddi.declaracoes = df.declaracao and "
              "  ddi.documentos = df.documentos  "
              "where "
-             "ddi.descservico is null and n.id_pessoas = 2394165 and "
-             "inf.discriminacao is not null and " 
-             "df.documentos = 230")
+             "ddi.descservico is null and "
+             "inf.discriminacao is not null and ddi.protocolodescr is null")
 
 ##query = text("select * from ecocep where novocep is not null and codigo = '1'")
 
 ##query = text("SELECT * FROM ajustedtisencao where protocolo is null")
 resultados = session.execute(query).fetchall()
-batch_size = 1
+batch_size = 50
 data = []
 for tabela in resultados:
     print(f'Entidade {tabela.entidade} Declaração {tabela.declaracao} NF {tabela.documentos}')
@@ -127,7 +126,7 @@ if data:
         stmt = text(f"""
                                         UPDATE declaracoes_df_itens 
                                         SET protocolodescr = '{f_token_retorno}' 
-                                        WHERE (entidade, declaracao,documentos) IN ({valores_in_sql})
+                                        WHERE (entidade, declaracoes,documentos) IN ({valores_in_sql})
                                     """)
         session.execute(stmt)
         session.commit()
