@@ -18,11 +18,11 @@ tokenEntidade = '8e00ef18-0b6e-4a87-94c9-d9d21ddec9c3'
 '''Utilizando select direto'''
 
 ##query = text("select * from ajustabairroimovel where protocolo is null")
-query = text("select * from bthsc248716alt where protolo is null and idcontr = 82648071")
+query = text("select * from bthsc248716alt where protolo is null")
 
 ##query = text("SELECT * FROM ajustedtisencao where protocolo is null")
 resultados = session.execute(query).fetchall()
-batch_size = 1
+batch_size = 50
 data = []
 for tabela in resultados:
     print(f'Contr  {tabela.idcontr} - id logra - {tabela.idlogra} id Bairro  {tabela.idbairroerrado} NomeBairro {tabela.idbairrocerto}')

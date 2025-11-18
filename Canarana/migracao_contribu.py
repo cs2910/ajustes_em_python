@@ -45,8 +45,8 @@ cursor_postgres.execute(f"select c.contribuinte_id, p.pessoa_id,p.pessoa_razao_s
 
 dados = cursor_postgres.fetchall()
 cursor_sybase.execute(f"CREATE TABLE cnvf_{tabela} ("
-                      f"cont_id integer, "
-                      f"pessoa_id integer,"
+                      f"cont_id bigint, "
+                      f"pessoa_id bigint,"
                       f"razao_social varchar(500),"
                       f"cpf_cnpj varchar(14),"
                       f"conversao_id integer,"

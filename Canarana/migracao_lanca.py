@@ -1,11 +1,11 @@
 import psycopg2
 import pyodbc
 ip = '192.168.15.8'
-port = '9015'
+port = '9012'
 database = 'Tributos'
 server = 'final'
-username = 'tecbth_stafba'
-password = 'Xye8bTwgqi7bMo6zXhcyWwqYmyJsKn'
+username = 'tecbth_delivery'
+password = 'AELgAhFDvajZvGfybNPSPt76wbUoDm'
 
 # Conexão com o banco de dados PostgreSQL
 
@@ -13,12 +13,12 @@ password = 'Xye8bTwgqi7bMo6zXhcyWwqYmyJsKn'
 conexao_postgres = psycopg2.connect(
     host="localhost",
     port="5432",
-    database="canarana22",
+    database="pmsocorro",
     user="postgres",
     password="Cp@142536"
 )
 cursor_postgres = conexao_postgres.cursor()
-tabela = 'lancamento'
+
 
 # Conexão com o banco de dados Sybase
 strConn = f'Driver=Adaptive Server Anywhere 9.0;ENG={server};UID={username};PWD={password};DBN={database};LINKS=TCPIP(HOST={ip}:{port});'
@@ -27,7 +27,7 @@ cursor_sybase = conexao.cursor()
 
 # Seleciona os dados da tabela no PostgreSQL
 
-cursor_postgres.execute(f"select * from tributario.lancamento where lancamento_id > 664884")
+cursor_postgres.execute(f"SELECT table_name FROM information_schema.columns WHERE  table_schema = 'socorrpm' and table_name LIKE 'ipt%'")
 
 
 
@@ -47,7 +47,7 @@ print(colunas)
 tipo_mapeamento = {
     'character varying': 'text',
     'varchar' : 'text',
-    'integer': 'INT',
+    'integer': 'BIGINT',
     'numeric': 'DECIMAL',
     'boolean': 'varchar',
     'date': 'DATE',
