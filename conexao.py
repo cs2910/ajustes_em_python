@@ -24,7 +24,7 @@ from sqlalchemy.engine import URL
 
 
 ## Conexao Ajustes
-'''url = URL.create(
+url = URL.create(
     drivername="postgresql",
     username="postgres",
     host="localhost",
@@ -33,17 +33,17 @@ from sqlalchemy.engine import URL
     ##database="ajustaeduc",
     password='Cp@142536',
     port='5432'
-)'''
+)
 
 ## Conexao Livro
-url = URL.create(
+'''url = URL.create(
     drivername="postgresql",
     username="postgres",
     host="localhost",
     database="livroatibaia",
     password='Cp@142536',
     port='5432'
-)
+)'''
 
 ## Conexao Patrimonio
 '''url = URL.create(
